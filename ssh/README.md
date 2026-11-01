@@ -8,6 +8,7 @@ Ubuntu 20.04 SSH exercises.
 | `1-create_ssh_key_pair` | Generate a 4096-bit RSA key named `school`, protected by the required exercise passphrase `betty`. |
 | `2-ssh_config` | Use `~/.ssh/school` for public-key authentication and refuse password and keyboard-interactive authentication. |
 | `3-add_authorized_key` | Validate and install a supplied RSA public key for `ubuntu`, preserving existing keys and avoiding duplicate key material. |
+| `alu_authorized_key.pub` | The exact ALU task-3 public key supplied for grader access. This is a public key, not a private credential. |
 
 ## Generate the key
 
@@ -55,16 +56,21 @@ Add the exact public key shown in task 3 as one line in
 directory and file belong to `ubuntu`, with modes `700` and `600`
 respectively. The ALU sandbox and the assigned server are separate machines.
 
-Save ALU's exact task-3 key as a single line in a file, then run this on the
-target server as `ubuntu` or root:
+ALU's exact task-3 key is saved as a single line in `alu_authorized_key.pub`.
+From this directory, run this on the target server as `ubuntu` or root:
 
 ```sh
-bash 3-add_authorized_key /path/to/alu-public-key.pub
+bash 3-add_authorized_key alu_authorized_key.pub
 ```
 
 The installer rejects malformed keys, retains existing entries, and sets
 the required permissions. Installing your own `school.pub` does not complete
 task 3; ALU's supplied key is required.
+
+The supplied ALU key has RSA size 2048 and fingerprint
+`SHA256:83vIEn8QchURHEMBnrJZtEnEHk+Tcb+RB21pzZ4mlRU`.
+It has been installed on the local Docker lab's `web-01`, preserving the
+existing keys. Reapply it if that container is recreated from its image.
 
 ## Verify
 
