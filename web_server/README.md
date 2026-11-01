@@ -48,6 +48,24 @@ The local Docker lab uses `172.25.0.11:80`, exposed on the Windows host at
 The ALU sandbox and the assigned web server are separate environments.
 External server checks require an assigned, publicly reachable server.
 
+## Public design demo
+
+The `docs` folder publishes the designed page through GitHub Pages. The
+task-5 design URL is:
+
+<https://fkangira.github.io/alu-system_engineering-devops/a-little-off-course>
+
+That nonexistent route displays the custom error page with HTTP 404. Its
+home links point to the demo's project home. Regenerate the hosted version
+after editing `web_server/404.html`:
+
+```sh
+python3 web_server/build_pages.py
+```
+
+The public design demo does not replace task 2's owned root domain or the
+assigned Nginx server required for the server-configuration checks.
+
 After public deployment, the task-5 URL can be a nonexistent path such as
 `http://YOUR_DOMAIN/a-little-off-course`, which displays the designed page
 while retaining HTTP 404. The HTML uses no external fonts, scripts, images,
