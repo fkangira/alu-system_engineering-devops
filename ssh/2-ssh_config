@@ -1,0 +1,8 @@
+# Authenticate using the school key and refuse password authentication.
+Host *
+    IdentityFile ~/.ssh/school
+    IdentitiesOnly yes
+    PreferredAuthentications publickey
+    PasswordAuthentication no
+    ChallengeResponseAuthentication no
+    KbdInteractiveAuthentication no

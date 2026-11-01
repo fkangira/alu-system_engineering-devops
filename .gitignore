@@ -1,0 +1,5 @@
+# Never publish generated private keys or editor swap files.
+school
+school.pub
+*.swp
+__pycache__/
