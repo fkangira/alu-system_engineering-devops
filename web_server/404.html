@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111c30">
+  <title>404 · A little off course</title>
+  <style>
+    :root { color-scheme: dark; --ink: #f2f3ed; --muted: #a6b1c1; --lime: #d8f39c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #111c30; color: var(--ink); font-family: "Segoe UI", Arial, sans-serif; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .25; background-image: radial-gradient(#7a8ba4 .6px, transparent .6px); background-size: 26px 26px; }
+    a { color: inherit; }
+    .shell { position: relative; max-width: 1200px; margin: auto; padding: 38px 48px 24px; }
+    header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 30px; border-bottom: 1px solid #344057; }
+    .brand { text-decoration: none; font-weight: 750; font-size: 15px; letter-spacing: .15em; display: inline-flex; gap: 12px; align-items: center; }
+    .brand svg { color: var(--lime); }
+    .status { font: 11px ui-monospace, Consolas, monospace; color: var(--muted); letter-spacing: .09em; }
+    .status::before { content: ""; display: inline-block; width: 6px; height: 6px; background: var(--lime); border-radius: 50%; margin-right: 9px; }
+    main { min-height: 660px; display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 35px; }
+    .eyebrow { font: 12px ui-monospace, Consolas, monospace; letter-spacing: .14em; color: var(--lime); margin: 0 0 25px; }
+    h1 { font-size: clamp(48px, 5.8vw, 76px); line-height: 1.06; font-weight: 500; letter-spacing: -.065em; margin: 0 0 27px; }
+    .description { color: var(--muted); font-size: 17px; line-height: 1.8; max-width: 350px; margin: 0 0 32px; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+    .home { display: inline-flex; align-items: center; gap: 32px; text-decoration: none; background: var(--lime); color: #18242d; padding: 16px 22px; border: 1px solid var(--lime); border-radius: 4px; font-size: 14px; font-weight: 650; transition: transform .2s, background .2s; }
+    .home:hover { background: #e7ffb7; transform: translateY(-2px); }
+    .back { border: 0; background: none; padding: 10px 0; color: #dce3ec; font: inherit; font-size: 13px; cursor: pointer; text-underline-offset: 5px; text-decoration: underline; }
+    :focus-visible { outline: 2px solid var(--lime); outline-offset: 5px; }
+    .map { position: relative; aspect-ratio: 1; }
+    .map svg { width: 100%; height: 100%; overflow: visible; }
+    .probe { animation: drift 6s ease-in-out infinite; transform-origin: 260px 195px; }
+    .coordinates { position: absolute; right: 0; bottom: 5%; color: #8f9eb1; font: 10px ui-monospace, Consolas, monospace; line-height: 1.8; letter-spacing: .07em; }
+    footer { border-top: 1px solid #344057; padding-top: 22px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 15px; font: 11px ui-monospace, Consolas, monospace; color: #97a5b8; }
+    footer span:last-child { color: #c8d1dc; }
+    @keyframes drift { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-13px) rotate(2deg); } }
+    @media (max-width: 760px) { .shell { padding: 25px 24px; } .status { display: none; } main { grid-template-columns: 1fr; gap: 5px; padding: 55px 0 30px; min-height: auto; } h1 { font-size: 58px; } .description { max-width: 100%; } .map { max-width: 390px; width: 100%; margin: 10px auto 25px; } }
+    @media (prefers-reduced-motion: reduce) { .probe { animation: none; } .home { transition: none; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <a class="brand" href="/" aria-label="Wayfinder home">
+        <svg width="25" height="25" viewBox="0 0 25 25" aria-hidden="true"><path d="m12.5 0 3.2 9.3 9.3 3.2-9.3 3.2-3.2 9.3-3.2-9.3L0 12.5l9.3-3.2Z" fill="currentColor"/></svg>
+        WAYFINDER
+      </a>
+      <span class="status">EXPLORATION IS STILL ENCOURAGED</span>
+    </header>
+    <main>
+      <section aria-labelledby="page-title">
+        <p class="eyebrow">404 / DESTINATION NOT FOUND</p>
+        <h1 id="page-title">A little<br>off course.</h1>
+        <p class="description">Even the best explorers take a wrong turn. This page has drifted beyond the map. Let's get you somewhere familiar.</p>
+        <div class="actions">
+          <a class="home" href="/">Back to home <span aria-hidden="true">↗</span></a>
+          <button class="back" type="button" onclick="if (history.length > 1) { history.back(); } else { location.href = '/'; }">Go back a step</button>
+        </div>
+      </section>
+      <div class="map" role="img" aria-label="A small satellite drifting beside a planet marked 404">
+        <svg viewBox="0 0 480 480" aria-hidden="true">
+          <defs><radialGradient id="planet" cx="35%" cy="27%"><stop stop-color="#38506a"/><stop offset="1" stop-color="#1a2a43"/></radialGradient><linearGradient id="panel"><stop stop-color="#c6e3a1"/><stop offset="1" stop-color="#84a47b"/></linearGradient></defs>
+          <circle cx="240" cy="260" r="193" fill="none" stroke="#34475f" stroke-dasharray="3 7"/>
+          <circle cx="240" cy="260" r="145" fill="url(#planet)" stroke="#4d6379"/>
+          <ellipse cx="240" cy="260" rx="220" ry="57" fill="none" stroke="#71848f" transform="rotate(-25 240 260)"/>
+          <path d="M121 341c84 29 223-20 313-100" stroke="#d8f39c" stroke-width="2" fill="none"/>
+          <text x="239" y="292" text-anchor="middle" fill="#d8e1dc" font-family="Georgia,serif" font-size="94" letter-spacing="-5">404</text>
+          <g stroke="#6a7e96" stroke-width="1"><path d="M44 119h12m-6-6v12M397 75h12m-6-6v12M416 384h12m-6-6v12"/></g>
+          <circle cx="80" cy="405" r="3" fill="#d8f39c"/><circle cx="367" cy="126" r="2" fill="#a5b4c2"/>
+          <g class="probe" transform="rotate(-16 260 100)">
+            <path d="m245 83-47-9-6 29 48 10m34-18 47 9-6 29-48-10" fill="url(#panel)" stroke="#d8edb8"/>
+            <path d="m208 77-6 28m18-26-6 28m88-19-6 28m18-26-6 28" stroke="#60826b"/>
+            <path d="m248 80 29 6-8 40-29-6Z" fill="#eee9d9" stroke="#b7c5c8"/>
+            <path d="m257 86 13-20m-20 17 3-17" stroke="#d5ded8" stroke-width="2"/>
+            <circle cx="269" cy="65" r="4" fill="#d8f39c"/>
+            <path d="m245 123-8 14m21-11-4 17" stroke="#c5d4d9"/>
+          </g>
+        </svg>
+        <div class="coordinates">SIGNAL: LOST<br>SPIRIT OF ADVENTURE: INTACT</div>
+      </div>
+    </main>
+    <footer><span lang="fr">Ceci n'est pas une page</span><span>WRONG TURN. GOOD STORY.</span></footer>
+  </div>
+</body>
+</html>

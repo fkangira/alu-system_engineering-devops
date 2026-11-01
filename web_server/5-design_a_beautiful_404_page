@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Install the designed 404 page while retaining the required HTTP behavior.
+set -e
+script_directory=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+bash "$script_directory/4-not_found_page_404"
+install -m 644 "$script_directory/404.html" /var/www/html/404.html
+nginx -t
+service nginx reload
