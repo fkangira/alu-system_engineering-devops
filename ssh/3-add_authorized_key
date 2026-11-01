@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Add a supplied RSA public key for ubuntu without replacing existing keys.
+set -euo pipefail
+
+if [[ $# -ne 1 || ! -f "$1" ]]; then
+    printf 'Usage: %s PUBLIC_KEY_FILE\n' "$0" >&2
+    exit 1
+fi
+
+public_key=$(tr -d '\r' < "$1")
+if [[ "$public_key" != ssh-rsa\ * || "$public_key" == *$'\n'* ]]; then
+    printf 'Provide one complete ssh-rsa public key on a single line.\n' >&2
+    exit 1
+fi
+ssh-keygen -l -f "$1" >/dev/null
+
+ubuntu_home=$(getent passwd ubuntu | cut -d: -f6)
+ubuntu_uid=$(id -u ubuntu)
+if [[ -z "$ubuntu_home" || ( "$EUID" -ne 0 && "$EUID" -ne "$ubuntu_uid" ) ]]; then
+    printf 'Run this script as ubuntu or root on the target server.\n' >&2
+    exit 1
+fi
+
+key_data=${public_key#* }
+key_data=${key_data%% *}
+ssh_directory="$ubuntu_home/.ssh"
+authorized_keys="$ssh_directory/authorized_keys"
+mkdir -p "$ssh_directory"
+touch "$authorized_keys"
+if ! awk -v key="$key_data" '
+    $1 == "ssh-rsa" && $2 == key { found = 1 }
+    END { exit !found }
+' "$authorized_keys"; then
+    printf '\n%s\n' "$public_key" >> "$authorized_keys"
+fi
+chmod 700 "$ssh_directory"
+chmod 600 "$authorized_keys"
+if [[ "$EUID" -eq 0 ]]; then
+    chown ubuntu:ubuntu "$ssh_directory" "$authorized_keys"
+fi
+printf 'Public key is authorized for ubuntu.\n'

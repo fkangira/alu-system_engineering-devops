@@ -17,7 +17,8 @@ class SshTests(unittest.TestCase):
 
     def test_script_headers_and_syntax(self):
         """Both scripts have required headers and valid Bash syntax."""
-        for name in ("0-use_a_private_key", "1-create_ssh_key_pair"):
+        for name in ("0-use_a_private_key", "1-create_ssh_key_pair",
+                     "3-add_authorized_key"):
             script = ROOT / name
             source = script.read_bytes()
             self.assertTrue(source.startswith(b"#!/usr/bin/env bash\n#"))
@@ -88,6 +89,24 @@ class SshTests(unittest.TestCase):
                 ["ssh-keygen", "-y", "-P", "", "-f", str(private_key)],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             self.assertNotEqual(wrong_passphrase.returncode, 0)
+
+    def test_installer_rejects_bad_input(self):
+        """Reject missing arguments, malformed keys, and multiline input."""
+        with tempfile.TemporaryDirectory() as temp:
+            bad_key = Path(temp) / "bad.pub"
+            cases = [[], [str(bad_key)]]
+            for arguments in cases:
+                result = subprocess.run(
+                    ["bash", str(ROOT / "3-add_authorized_key")] + arguments,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                self.assertNotEqual(result.returncode, 0)
+            for contents in ("not a key\n", "ssh-rsa broken\n",
+                             "ssh-rsa one\nssh-rsa two\n"):
+                bad_key.write_text(contents)
+                result = subprocess.run(
+                    ["bash", str(ROOT / "3-add_authorized_key"), str(bad_key)],
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                self.assertNotEqual(result.returncode, 0)
 
 
 if __name__ == "__main__":

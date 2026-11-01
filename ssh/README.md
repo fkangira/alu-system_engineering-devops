@@ -7,6 +7,7 @@ Ubuntu 20.04 SSH exercises.
 | `0-use_a_private_key` | Connect as `ubuntu` with `~/.ssh/school`, using only the single-character SSH flags `-i` and `-p`. |
 | `1-create_ssh_key_pair` | Generate a 4096-bit RSA key named `school`, protected by the required exercise passphrase `betty`. |
 | `2-ssh_config` | Use `~/.ssh/school` for public-key authentication and refuse password and keyboard-interactive authentication. |
+| `3-add_authorized_key` | Validate and install a supplied RSA public key for `ubuntu`, preserving existing keys and avoiding duplicate key material. |
 
 ## Generate the key
 
@@ -54,13 +55,24 @@ Add the exact public key shown in task 3 as one line in
 directory and file belong to `ubuntu`, with modes `700` and `600`
 respectively. The ALU sandbox and the assigned server are separate machines.
 
+Save ALU's exact task-3 key as a single line in a file, then run this on the
+target server as `ubuntu` or root:
+
+```sh
+bash 3-add_authorized_key /path/to/alu-public-key.pub
+```
+
+The installer rejects malformed keys, retains existing entries, and sets
+the required permissions. Installing your own `school.pub` does not complete
+task 3; ALU's supplied key is required.
+
 ## Verify
 
 From the repository root on Ubuntu:
 
 ```sh
 python3 test_ssh.py -v
-shellcheck ssh/0-use_a_private_key ssh/1-create_ssh_key_pair
+shellcheck ssh/0-use_a_private_key ssh/1-create_ssh_key_pair ssh/3-add_authorized_key
 ```
 
 The tests check shell syntax, the SSH arguments with a mock client, parsed
