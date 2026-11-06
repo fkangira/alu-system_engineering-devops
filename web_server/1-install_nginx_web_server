@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 # Install and configure Nginx to serve Holberton School on port 80.
 
