@@ -1,32 +1,8 @@
 #!/usr/bin/env bash
-# Install and configure Nginx to serve Holberton School on port 80.
-
-set -e
-
-export DEBIAN_FRONTEND=noninteractive
-
-apt-get update
+# Install nginx listening on port 80 and serving a page that contains Holberton School
+apt-get update -y
 apt-get install -y nginx
 
-mkdir -p /var/www/html
-printf 'Holberton School\n' > /var/www/html/index.html
+echo "Holberton School for the win!" > /var/www/html/index.html
 
-cat > /etc/nginx/sites-available/default <<'NGINX'
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
-    index index.html;
-    server_name _;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-NGINX
-
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-
-nginx -t
 service nginx restart
