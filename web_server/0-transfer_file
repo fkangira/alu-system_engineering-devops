@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 # Transfer a file to a remote server using SCP.
 
@@ -7,4 +6,4 @@ if [ "$#" -lt 4 ]; then
     exit 1
 fi
 
-scp -o StrictHostKeyChecking=no -r -i "$4" "$1" "$3@$2:~/"
+scp -o StrictHostKeyChecking=no -i "$4" "$1" "$3@$2:~/"
