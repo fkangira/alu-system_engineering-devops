@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Install HAProxy on lb-01 and balance traffic to web-01 and web-02 (roundrobin).
+
+set -e
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get update
+apt-get install -y haproxy
+
+cat > /etc/haproxy/haproxy.cfg <<'HAPROXY'
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    maxconn 2048
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
+frontend http_front
+    bind *:80
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    server 7204-web-01 18.133.239.146:80 check
+    server 7204-web-02 35.177.254.240:80 check
+HAPROXY
+
+# Allow HAProxy to be managed by its init script.
+if [ -f /etc/default/haproxy ]; then
+    sed -i 's/^ENABLED=.*/ENABLED=1/' /etc/default/haproxy
+    grep -q '^ENABLED=' /etc/default/haproxy || echo 'ENABLED=1' >> /etc/default/haproxy
+else
+    echo 'ENABLED=1' > /etc/default/haproxy
+fi
+
+haproxy -c -f /etc/haproxy/haproxy.cfg
+service haproxy restart
