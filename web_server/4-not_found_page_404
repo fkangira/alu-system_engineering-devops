@@ -1,23 +1,40 @@
 #!/usr/bin/env bash
-# Configure Nginx to display a custom 404 error page.
+# Install Nginx and configure a custom 404 error page.
 
 set -e
+export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 apt-get install -y nginx
 
-CONFIG="/etc/nginx/sites-available/default"
-
 mkdir -p /var/www/html
+printf 'Holberton School\n' > /var/www/html/index.html
 printf "Ceci n'est pas une page\n" > /var/www/html/404.html
 
-if ! grep -q 'error_page 404 /404.html;' "$CONFIG"; then
-    sed -i '/location \/ {/i\    error_page 404 /404.html;' "$CONFIG"
-fi
+cat > /etc/nginx/sites-available/default <<'NGINX'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html;
+    server_name _;
 
-if ! grep -q 'location = /404.html' "$CONFIG"; then
-    sed -i '/location \/ {/i\    location = /404.html { internal; }' "$CONFIG"
-fi
+    error_page 404 /404.html;
 
+    location = /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location = /404.html {
+        internal;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+NGINX
+
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 nginx -t
 service nginx restart
