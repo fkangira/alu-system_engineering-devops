@@ -30,39 +30,3 @@ ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 nginx -t
 service nginx restart
-#!/usr/bin/env bash
-# Install Nginx and serve the required home page on port 80.
-set -e
-export DEBIAN_FRONTEND=noninteractive
-apt-get update
-apt-get install -y nginx
-mkdir -p /var/www/html
-printf 'Holberton School\n' > /var/www/html/index.html
-
-cat > /etc/nginx/sites-available/default <<'NGINX'
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /var/www/html;
-    index index.html;
-    server_name _;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-NGINX
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-nginx -t
-service nginx restart
-
-
-#!/usr/bin/env bash
-# Install Nginx and configure the default homepage.
-
-apt-get update
-apt-get install -y nginx
-
-echo "Holberton School" > /var/www/html/index.html
-
-service nginx start
