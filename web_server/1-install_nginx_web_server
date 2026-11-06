@@ -23,3 +23,14 @@ NGINX
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 nginx -t
 service nginx restart
+
+
+#!/usr/bin/env bash
+# Install Nginx and configure the default homepage.
+
+apt-get update
+apt-get install -y nginx
+
+echo "Holberton School" > /var/www/html/index.html
+
+service nginx start
