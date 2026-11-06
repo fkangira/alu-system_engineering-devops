@@ -43,5 +43,11 @@ else
     echo 'ENABLED=1' > /etc/default/haproxy
 fi
 
+# HAProxy 2.x lowercases header names; keep the usual capitalisation (1.x keeps it).
+if [ "$(haproxy -v | sed -n 's/^HA-Proxy version \([0-9]*\)\..*/\1/p')" -ge 2 ]; then
+    sed -i '/^    daemon$/a\    h1-case-adjust x-served-by X-Served-By\n    h1-case-adjust server Server\n    h1-case-adjust date Date\n    h1-case-adjust content-type Content-Type\n    h1-case-adjust content-length Content-Length\n    h1-case-adjust last-modified Last-Modified\n    h1-case-adjust etag ETag\n    h1-case-adjust connection Connection\n    h1-case-adjust accept-ranges Accept-Ranges' /etc/haproxy/haproxy.cfg
+    sed -i '/^frontend http_front$/a\    option h1-case-adjust-bogus-client' /etc/haproxy/haproxy.cfg
+fi
+
 haproxy -c -f /etc/haproxy/haproxy.cfg
 service haproxy restart
