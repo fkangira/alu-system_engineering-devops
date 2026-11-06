@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Lost in Space</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(
+                circle at top,
+                #1d3566,
+                #090e20 65%
+            );
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(white 1px, transparent 1px),
+                radial-gradient(#8eb8ff 1px, transparent 1px);
+            background-size: 70px 70px, 110px 110px;
+            background-position: 0 0, 35px 50px;
+            opacity: 0.25;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 35px;
+            max-width: 650px;
+        }
+
+        .planet {
+            width: 125px;
+            height: 125px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #8b5cf6,
+                #3b82f6
+            );
+            box-shadow: 0 0 75px #6d5df588;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: clamp(110px, 24vw, 190px);
+            margin: 0;
+            letter-spacing: -12px;
+            background: linear-gradient(
+                90deg,
+                #7dd3fc,
+                #c4b5fd
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: 30px;
+            margin: 5px 0 15px;
+        }
+
+        p {
+            color: #cbd5e1;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .required-message {
+            color: #a5b4fc;
+            font-weight: bold;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 15px 32px;
+            border-radius: 30px;
+            background: #fff;
+            color: #111827;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        a:hover {
+            transform: translateY(-4px);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+
+    <main class="container">
+        <div class="planet"></div>
+
+        <h1>404</h1>
+
+        <h2>Oops! Lost in Space</h2>
+
+        <p>
+            It looks like you have travelled
+            beyond the pages of our universe.
+            The page you are looking for
+            does not exist.
+        </p>
+
+        <p class="required-message">
+            Ceci n'est pas une page
+        </p>
+
+        <a href="/">Return to Earth</a>
+    </main>
+</body>
+</html>
