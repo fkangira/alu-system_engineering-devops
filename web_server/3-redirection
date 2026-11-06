@@ -1,29 +1,20 @@
 #!/usr/bin/env bash
-# Install Nginx and configure a permanent redirect for /redirect_me.
+# Configure a permanent HTTP redirect for /redirect_me.
+
 set -e
-export DEBIAN_FRONTEND=noninteractive
+
 apt-get update
 apt-get install -y nginx
-mkdir -p /var/www/html
-printf 'Holberton School\n' > /var/www/html/index.html
 
-cat > /etc/nginx/sites-available/default <<'NGINX'
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /var/www/html;
-    index index.html;
-    server_name _;
+CONFIG="/etc/nginx/sites-available/default"
 
-    location ~ ^/redirect_me/?$ {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
+if ! grep -q 'location = /redirect_me' "$CONFIG"; then
+    sed -i '/location \/ {/i\
+    location = /redirect_me {\
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\
+    }\
+' "$CONFIG"
+fi
 
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-NGINX
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 nginx -t
 service nginx restart
