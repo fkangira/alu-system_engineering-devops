@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Create a self-signed certificate and configure Nginx as an HTTPS load balancer for web-01 and web-02.
+
+set -e
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get update -y
+apt-get install -y nginx openssl
+
+mkdir -p /etc/ssl/lb
+openssl req -x509 -nodes -newkey rsa:2048 -days 365 \
+    -keyout /etc/ssl/lb/selfsigned.key -out /etc/ssl/lb/selfsigned.crt \
+    -subj "/C=RW/O=ALU/CN=lb-01.local"
+chmod 600 /etc/ssl/lb/selfsigned.key
+
+cat > /etc/nginx/sites-available/default <<'NGINX'
+upstream backend {
+    server web-01:80;
+    server web-02:80;
+}
+
+server {
+    listen 80 default_server;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl default_server;
+    ssl_certificate /etc/ssl/lb/selfsigned.crt;
+    ssl_certificate_key /etc/ssl/lb/selfsigned.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location / {
+        proxy_pass http://backend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+}
+NGINX
+
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+nginx -t
+service nginx restart || service nginx start
