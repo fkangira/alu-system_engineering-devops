@@ -2,7 +2,6 @@
 # Install Nginx and add an X-Served-By header containing the server hostname.
 # shellcheck disable=SC2154
 
-set -e
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
