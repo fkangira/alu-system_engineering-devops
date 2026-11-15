@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Install HAProxy on lb-01 and balance traffic to web-01 and web-02 (roundrobin).
 
-set -e
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
