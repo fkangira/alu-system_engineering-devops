@@ -41,3 +41,11 @@ NGINX
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 nginx -t
 service nginx restart
+
+# Wait until Nginx answers so the header is ready when the script ends.
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+    if curl -s -o /dev/null http://localhost/; then
+        break
+    fi
+    sleep 1
+done
